@@ -1,18 +1,14 @@
-# MVVM
-一个协议，100行示例代码告诉你 纯Swift MVVM 怎么布局
-## 一个协议
-```
+import UIKit
+import PlaygroundSupport
+
+// ViewModel 协议
 protocol ViewModelProtocol {
     associatedtype Input
     associatedtype Output
     func input(_ input:Input)
     var output:((Output)->Void)? { set get }
 }
-```
 
-## 示例
-- 详细见 Playground
-```
 // 一个 Model
 struct Model {
     var title = ""
@@ -149,4 +145,3 @@ class MyViewController : UIViewController {
     }
 }
 PlaygroundPage.current.liveView = MyViewController()
-```
