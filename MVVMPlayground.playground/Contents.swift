@@ -16,8 +16,8 @@ struct Model {
 
 // 一个 ViewModel
 class ViewModel {
-    var page = 1
-    var model = Model()
+    private var page = 1
+    private var model = Model()
     private var _output:((Output)->Void)?
 }
 extension ViewModel {
@@ -25,7 +25,6 @@ extension ViewModel {
         case request(Bool)
         case color
     }
-    
     enum OutputType{
         case loading(String)
         case loaded(String)
@@ -86,31 +85,14 @@ class MyViewController : UIViewController {
         label.textColor = .black
         view.addSubview(label)
         
-        do{
-            let button = UIButton(frame: CGRect(x: 10, y: 200, width: 200, height: 30))
-            button.setTitle("刷新", for: .normal)
-            button.backgroundColor = .lightGray
-            button.tag = 10
+        for (i, item) in ["刷新", "加载更多", "更新颜色"].enumerated() {
+            let button = UIButton(frame: CGRect(x: 10, y: 200 + i * 40, width: 200, height: 30))
+            button.setTitle(item, for: .normal)
+            button.backgroundColor = .red
+            button.tag = 10 + i
             button.addTarget(self, action: #selector(clickButton(_ :)), for: .touchUpInside)
             view.addSubview(button)
         }
-        do{
-            let button = UIButton(frame: CGRect(x: 10, y: 240, width: 200, height: 30))
-            button.setTitle("加载更多", for: .normal)
-            button.backgroundColor = .lightGray
-            button.tag = 11
-            button.addTarget(self, action: #selector(clickButton(_ :)), for: .touchUpInside)
-            view.addSubview(button)
-        }
-        do{
-            let button = UIButton(frame: CGRect(x: 10, y: 280, width: 200, height: 30))
-            button.setTitle("更新颜色", for: .normal)
-            button.backgroundColor = .lightGray
-            button.tag = 12
-            button.addTarget(self, action: #selector(clickButton(_ :)), for: .touchUpInside)
-            view.addSubview(button)
-        }
-        
         self.view = view
         // ViewModel 输出
         vm.output = { puts in
@@ -120,13 +102,10 @@ class MyViewController : UIViewController {
                     label.text = model.title
                 case .color(let col):
                     label.backgroundColor = col
-                case .loading(let str):
-                    labelload.text = str
-                case .loaded( let str):
+                case .loading(let str), .loaded( let str):
                     labelload.text = str
                 }
             }
-            
         }
         vm.input(.request(true))
     }
